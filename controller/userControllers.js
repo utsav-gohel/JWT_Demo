@@ -2,7 +2,7 @@ const userModel = require("../model/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const SECRET_KEY = "NOTESAPI";
-
+const expiresIn = process.env.JWT_EXPIRES_IN;
 const getUser = async (req, res) => {
   try {
     const data = await userModel.findById(req.params.id);
@@ -25,8 +25,15 @@ const signUp = async (req, res) => {
       password: hashPwd,
       username: username,
     });
-    const token = jwt.sign({ email: result.email, id: result._id }, SECRET_KEY);
+    const token = jwt.sign(
+      { email: result.email, id: result._id },
+      SECRET_KEY,
+      {
+        expiresIn,
+      }
+    );
     res.status(201).json({
+      message: "SignUp Succesfully",
       user: await result,
       token: token,
     });
@@ -48,9 +55,13 @@ const signIn = async (req, res) => {
   }
   const token = await jwt.sign(
     { email: existUser.email, id: existUser.id },
-    SECRET_KEY
+    SECRET_KEY,
+    {
+      expiresIn,
+    }
   );
   res.status(200).json({
+    message: "SignIn Succesfully",
     user: existUser,
     token: token,
   });
