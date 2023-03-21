@@ -9,11 +9,11 @@ const auth = (req, res, next) => {
       let user = jwt.verify(token, SECRET_KEY);
       req.userId = user.id;
     } else {
-      res.status(401).json({ msg: "unauthorized user" });
+      res.status(401).json({ msg: "Unauthorized user" });
     }
     next();
   } catch (e) {
-    res.status(401).json({ msg: "unauthorized user" });
+    res.status(401).json({ msg: "Unauthorized User or Session Expired" });
   }
 };
 
