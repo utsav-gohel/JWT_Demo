@@ -11,6 +11,14 @@ const getUser = async (req, res) => {
     res.status(500).json({ msg: "err" });
   }
 };
+const getAllUser = async (req, res) => {
+  try {
+    const data = await userModel.find();
+    res.status(200).json({ data });
+  } catch (e) {
+    res.status(500).json({ msg: "err" });
+  }
+};
 
 const signUp = async (req, res) => {
   const { username, email, password } = req.body;
@@ -67,4 +75,4 @@ const signIn = async (req, res) => {
   });
 };
 
-module.exports = { signIn, signUp, getUser };
+module.exports = { signIn, signUp, getUser, getAllUser };
